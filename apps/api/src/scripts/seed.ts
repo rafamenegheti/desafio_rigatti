@@ -59,8 +59,9 @@ const companies: { name: string; adminEmail: string; userEmail: string; products
 ];
 
 async function seed() {
-  if (env.NODE_ENV === 'production') {
-    throw new Error('O seed apaga todos os dados e não roda com NODE_ENV=production');
+  // Em produção só roda com opt-in explícito (ex.: demo em Docker): o seed APAGA todos os dados
+  if (env.NODE_ENV === 'production' && process.env.ALLOW_SEED !== 'true') {
+    throw new Error('O seed apaga todos os dados e não roda com NODE_ENV=production (use ALLOW_SEED=true só em demos)');
   }
   await connectDatabase(env.MONGODB_URI);
 

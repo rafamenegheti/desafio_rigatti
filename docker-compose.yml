@@ -1,3 +1,7 @@
+# Só o banco (para desenvolver rodando API e web na sua máquina):
+#   docker compose up -d mongo
+# Tudo junto (banco + API + web em http://localhost:8080):
+#   docker compose up --build
 services:
   mongo:
     image: mongo:7
@@ -13,5 +17,40 @@ services:
       timeout: 5s
       retries: 5
 
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3333
+      MONGODB_URI: mongodb://mongo:27017/mini_saas
+      # Valor de demonstração. Em qualquer ambiente real, defina JWT_SECRET (openssl rand -hex 32)
+      JWT_SECRET: ${JWT_SECRET:-demo-apenas-para-docker-troque-em-producao-0123456789}
+      CORS_ORIGIN: http://localhost:8080
+      # "mock" roda sem chave; para o Claude de verdade: LLM_PROVIDER=anthropic e ANTHROPIC_API_KEY=sk-ant-...
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-haiku-5-5}
+    volumes:
+      - uploads_data:/app/apps/api/uploads
+    ports:
+      - "3333:3333"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
 volumes:
   mongo_data:
+  uploads_data:
