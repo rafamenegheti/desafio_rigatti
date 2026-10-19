@@ -6,6 +6,8 @@ import pinoHttp from 'pino-http';
 import { env } from './config/env';
 import { logger } from './config/logger';
 import { authRouter } from './modules/auth/auth.routes';
+import { productRouter } from './modules/products/product.routes';
+import { uploadRouter, uploadStatic } from './modules/uploads/upload.routes';
 import { userRouter } from './modules/users/user.routes';
 import { errorHandler, notFoundHandler } from './shared/middleware/error-handler';
 
@@ -28,6 +30,9 @@ export function createApp() {
 
   app.use('/auth', authRouter);
   app.use('/users', userRouter);
+  app.use('/products', productRouter);
+  app.use('/uploads', uploadStatic);
+  app.use('/uploads', uploadRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
