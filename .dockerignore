@@ -1,5 +1,7 @@
 **/node_modules
 **/dist
 **/.env
-**/uploads
+# Só a pasta de arquivos enviados na raiz da API (não a de código em src/modules/uploads)
+apps/api/uploads
+apps/api/uploads-test
 .git
