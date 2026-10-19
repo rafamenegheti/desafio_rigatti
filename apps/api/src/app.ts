@@ -6,12 +6,16 @@ import pinoHttp from 'pino-http';
 import { env } from './config/env';
 import { logger } from './config/logger';
 import { authRouter } from './modules/auth/auth.routes';
+import { createChatRouter } from './modules/chat/chat.routes';
+import { createLlmProvider } from './modules/chat/llm';
+import type { LlmProvider } from './modules/chat/llm/types';
 import { productRouter } from './modules/products/product.routes';
 import { uploadRouter, uploadStatic } from './modules/uploads/upload.routes';
 import { userRouter } from './modules/users/user.routes';
 import { errorHandler, notFoundHandler } from './shared/middleware/error-handler';
 
-export function createApp() {
+/** O provider de LLM é injetável: produção usa o do .env, os testes passam um falso. */
+export function createApp(llm: LlmProvider = createLlmProvider()) {
   const app = express();
 
   app.disable('x-powered-by');
@@ -31,6 +35,7 @@ export function createApp() {
   app.use('/auth', authRouter);
   app.use('/users', userRouter);
   app.use('/products', productRouter);
+  app.use('/chat', createChatRouter(llm));
   app.use('/uploads', uploadStatic);
   app.use('/uploads', uploadRouter);
 
