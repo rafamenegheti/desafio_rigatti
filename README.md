@@ -74,12 +74,19 @@ Abra http://localhost:5173. A API fica em http://localhost:3333.
 
 ### Contas de teste
 
-A senha de todas é `Senha@123`.
+A senha de todas as contas é: `Senha@123`
 
-- TechStore (notebooks, celulares, áudio...): `admin@techstore.com` e `cliente@techstore.com`
-- Casa & Conforto (móveis, cozinha...): `admin@casaconforto.com` e `cliente@casaconforto.com`
+TechStore (notebooks, celulares, áudio...):
 
-Os e-mails que começam com `admin` têm papel de administrador; os que começam com `cliente` são usuários comuns. Para ver o isolamento, entre em cada empresa e pergunte ao assistente por "cadeira": só a Casa & Conforto tem.
+- `admin@techstore.com` — administrador (cria, edita e apaga produtos)
+- `cliente@techstore.com` — usuário comum (só visualiza e usa o chat)
+
+Casa & Conforto (móveis, cozinha...):
+
+- `admin@casaconforto.com` — administrador
+- `cliente@casaconforto.com` — usuário comum
+
+Para ver o isolamento entre empresas, entre em cada uma e pergunte ao assistente por "cadeira": só a Casa & Conforto tem.
 
 ### Usando o Claude de verdade
 
